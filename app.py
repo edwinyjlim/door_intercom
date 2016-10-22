@@ -17,9 +17,12 @@ my_phone_num = "+13108923481"
 
 
 #RPi GPIO configs and functions
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(7, GPIO.OUT)
-def LED_blink(pin):
+
+def set_GPIO (pin):
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(pin, GPIO.OUT)
+    
+def LED_blink (pin):
     GPIO.output(pin, 1)
     time.sleep(1)
     GPIO.output(pin, 0)
@@ -28,7 +31,7 @@ def LED_blink(pin):
 
 def flash_LED (pin, blink_count):
     for i in range(0, blink_count):
-        LED_blink(pin)
+        LED_blink(pin) 
     
 
 @app.route('/')
@@ -37,6 +40,7 @@ def hell_world():
 
 @app.route('/textme')
 def text_me():
+    set_GPIO(7)
     flash_LED(7, 3)
     GPIO.cleanup()
     tw_client.messages.create(
@@ -48,6 +52,7 @@ def text_me():
 
 @app.route('/texttwilio')
 def text_twilio():
+    set_GPIO(7)
     flash_LED(7, 3)
     GPIO.cleanup()
     tw_client.messages.create(
@@ -57,7 +62,17 @@ def text_twilio():
     )
     return 'You sent Twilio a test text'
 
+@app.route('/request')
+def request():
+    print 'GOT A REQUEST FROM TWILIO'
+    return 'GOT A REQUEST FROM TWILIO'
+
+@app.route('/callback')
+def callback():
+    print 'GOT CALLBACK FROM TWILIO'
+    return 'GOT A CALLBACK FROM TWILIO'
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
         
