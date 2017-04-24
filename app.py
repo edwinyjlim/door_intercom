@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, render_template
 from twilio.rest import TwilioRestClient
 import RPi.GPIO as GPIO
 import time
@@ -8,69 +8,76 @@ app = Flask(__name__)
 
 
 # twilio account
-tw_account_sid = "AC1d50cb742f20a3ba02d3469389b261d1"
-tw_auth_token = "a4e877d10da778251189c9d07c250f34"
-tw_phone_num = "+13108538839"
-tw_client = TwilioRestClient(tw_account_sid, tw_auth_token)
+#tw_account_sid = "AC1d50cb742f20a3ba02d3469389b261d1"
+#tw_auth_token = "a4e877d10da778251189c9d07c250f34"
+#tw_phone_num = "+13108959170"
+#tw_client = TwilioRestClient(tw_account_sid, tw_auth_token)
+#my_phone_num = "+13108923481"
 
-my_phone_num = "+13108923481"
 
+@app.context_processor
+def inject_template_globals():
+    return {
+        'nowts': time.clock(),
+    }
 
-#RPi GPIO configs and functions
 
 def set_GPIO (pin):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(pin, GPIO.OUT)
+
+def reset_GPIO():
+    GPIO.cleanup()
     
-def LED_blink (pin):
-    GPIO.output(pin, 1)
-    time.sleep(1)
-    GPIO.output(pin, 0)
-    time.sleep(1)
+def blink_GPIO (pin, blink_count):
+    set_GPIO(pin)
+    for i in range(0, blink_count):
+        GPIO.output(pin, 1)
+        time.sleep(1)
+        GPIO.output(pin, 0)
+        time.sleep(1)
+    reset_GPIO()
     return
 
-def flash_LED (pin, blink_count):
-    for i in range(0, blink_count):
-        LED_blink(pin) 
-    
+def activate_GPIO (pin, duration):
+    set_GPIO(pin)
+    GPIO.output(pin, 1)
+    time.sleep(duration)
+    GPIO.output(pin, 0)
+    reset_GPIO()
+    return
+
 
 @app.route('/')
 def hell_world():
-    return 'HELLOOOOOOO WORLD ' + str(time.ctime())
+    return render_template('index.html')
 
-@app.route('/textme')
-def text_me():
-    set_GPIO(7)
-    flash_LED(7, 3)
-    GPIO.cleanup()
-    tw_client.messages.create(
-        to=my_phone_num,
-        from_=tw_phone_num,
-        body="this is my RPi test SMS sent on " + str(time.ctime())
-    )
-    return 'Twilio sent you a test text -- check your phone'
+@app.route('/knockknock')
+def knockknock():
+    return render_template('knockknock.html')
+    
 
-@app.route('/texttwilio')
-def text_twilio():
-    set_GPIO(7)
-    flash_LED(7, 3)
-    GPIO.cleanup()
-    tw_client.messages.create(
-        to=tw_phone_num,
-        from_=tw_phone_num,
-        body="Hi Twilio, this is my test SMS sent on " + str(time.ctime())
-    )
-    return 'You sent Twilio a test text'
+@app.route('/flashlight')
+def flashlight():
+    blink_GPIO(7,3)
+    return 'Flashing GPIO pin 3 times'
 
-@app.route('/request')
-def request():
-    print 'GOT A REQUEST FROM TWILIO'
-    return 'GOT A REQUEST FROM TWILIO'
+@app.route('/activate')
+def activate():
+    activate_GPIO(7,5)
+    return 'Activating GPIO pin for 5 seconds'
 
-@app.route('/callback')
+
+@app.route('/callback', methods=['GET', 'POST'])
 def callback():
-    print 'GOT CALLBACK FROM TWILIO'
-    return 'GOT A CALLBACK FROM TWILIO'
+    print 'callback'
+    return 'callback'
+
+
+@app.route('/error', methods=['GET', 'POST'])
+def error():
+    print 'Something went wrong...'
+    return 'Something went wrong...'
 
 
 if __name__ == "__main__":
