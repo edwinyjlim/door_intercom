@@ -59,6 +59,10 @@
       The RaspberryPi has the Flask app on a detatched screen session named "flaskapp" ($ screen -r flaskapp). The apartment router is running a dynamic DNS, fiveflightrock.mynetgear.com, and is portforwarding port 80 (web server requests) and port 22 (ssh requests) to the internal RaspberryPi IP address 192.168.1.4. Flask is running on port 5000.
     </p>
 
+    <p>
+      A bash script, flask_on_reboot.sh, is executed on every reboot of the RaspberryPi. The executable code is located at ~/.bashrc toward the bottom. The default logged in user is pi. 
+    </p>
+
 
     <b>Endpoints</b>
     <ul>
