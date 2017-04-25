@@ -42,6 +42,10 @@ body {
     margin-top: -20px;
 }
 
+#knockknock #submit {
+    margin-left: 10px;
+}
+
 #knockknock.slidedown {
     margin-top: 30px;
 }
