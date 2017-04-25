@@ -18,8 +18,8 @@ body {
 }
 
 #poem .rhyme {
-    -webkit-transition: color 5s;
-    transition: color 5s;
+    -webkit-transition: color 3s;
+    transition: color 3s;
 }
 
 #poem .rhyme.turn-green {
