@@ -40,7 +40,7 @@ def activate_GPIO (pin, duration):
 
 
 @app.route('/')
-def hell_world():
+def hello_world():
     return render_template('index.html')
 
 @app.route('/knockknock')
@@ -72,16 +72,6 @@ def buzzer():
         door_status = 'open'
     return jsonify(door_status=door_status)
 
-@app.route('/callback', methods=['GET', 'POST'])
-def callback():
-    print 'callback'
-    return 'callback'
-
-
-@app.route('/error', methods=['GET', 'POST'])
-def error():
-    print 'Something went wrong...'
-    return 'Something went wrong...'
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')
