@@ -63,6 +63,7 @@ def punchline():
     return jsonify(door_status=door_status,
                    message=message);
 
+
 @app.route('/buzzer', methods=['POST'])
 def buzzer():
     punchline = request.form.get('punchline')
@@ -72,6 +73,14 @@ def buzzer():
         door_status = 'open'
     return jsonify(door_status=door_status)
 
+
+@app.route('/shutdown', methods=['POST', 'GET'])
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+    return 'Server is shutting down.'
 
 if __name__ == "__main__":
     app.run(debug=True,host='0.0.0.0')

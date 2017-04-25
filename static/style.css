@@ -64,6 +64,9 @@ body {
     outline: none;
 }
 
+#kill {
+    margin-top: 100px;
+}
 
 @media (max-width: 600px) {
     #content {
