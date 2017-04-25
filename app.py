@@ -1,11 +1,11 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import RPi.GPIO as GPIO
 import time
 from datetime import date
 
 app = Flask(__name__)
 
-
+the_punchline = 'danger'
 
 @app.context_processor
 def inject_template_globals():
@@ -47,18 +47,31 @@ def hell_world():
 @app.route('/knockknock')
 def knockknock():
     return render_template('knockknock.html')
+
+@app.route('/punchline', methods=['POST'])
+def punchline():
     
+    punchline = request.form.get('punchline')
+    print 'user submitted passphrase: '+punchline
+    
+    door_status = 'closed'
+    message = 'Incorrect passphrase.'
+    
+    if punchline == the_punchline:
+        door_status = 'open'
+        message = 'Welcome.'
+        
+    return jsonify(door_status=door_status,
+                   message=message);
 
-@app.route('/flashlight')
-def flashlight():
-    blink_GPIO(7,3)
-    return 'Flashing GPIO pin 3 times'
-
-@app.route('/activate')
-def activate():
-    activate_GPIO(7,5)
-    return 'Activating GPIO pin for 5 seconds'
-
+@app.route('/buzzer', methods=['POST'])
+def buzzer():
+    punchline = request.form.get('punchline')
+    door_status = 'closed'
+    if punchline == the_punchline:
+        activate_GPIO(7,7)
+        door_status = 'open'
+    return jsonify(door_status=door_status)
 
 @app.route('/callback', methods=['GET', 'POST'])
 def callback():

@@ -1,16 +1,99 @@
 {% extends "default.html" %}
 
+
+{% block head %}
+
+{{ super() }}
+
+<script>
+    var disabled = false;
+    setTimeout(function() {     
+	$("form").on("submit", function() {
+
+	    if (disabled) {
+		return;
+	    }
+	    
+	    disabled = true;
+	    $("#submit").hide();
+	    $('#response').text('').removeClass('p-red p-green');
+	    var punchline = $("input[name='punchline']").val().trim();
+	    
+	    if (!punchline) {
+		$("#submit").show();
+		disabled = false;
+		return;
+	    } else {
+		punchline = punchline.toLowerCase()
+	    }
+	    
+	    $.post("/punchline", {punchline: punchline}, function(data) {
+		
+		var door_status = data.door_status;
+		var message = data.message;
+		
+		if (door_status === 'open') {
+		    $('#response').text(message).addClass('p-green');
+		    var dotCount = 0;
+		    var dots = '';
+		    var buzzing = setInterval(function() {
+			dotCount = dotCount + 1;
+			if (dotCount >= 5) {
+			    dots = '.';
+			    dotCount = 0;
+			} else {
+			    dots = dots + '.';
+			}
+			$('#loading-text').text('Buzzing'+dots);
+		    }, 500);
+
+		    $.post("/buzzer", {punchline: punchline}, function(data) {
+			$('#response').text('Door is closed.');
+			$('#loading-text').text('');
+			$("#submit").show();
+			clearInterval(buzzing);
+			disabled = false;
+
+		    })
+			.fail(function(error) {
+			    $('#response').text(error.status + ' ' +error.statusText).addClass('p-red');
+			    $('#loading-text').text('');
+			    $("#submit").show();
+			    disabled = false;
+			});
+		    
+		} else {
+		    $('#response').text(message).addClass('p-red');
+		    $("#submit").show();
+		    disabled = false;
+		}
+		
+	    })
+		.fail(function(error) {
+		    
+		    $('#response').text(error.status + ' ' +error.statusText).addClass('p-red');
+		    $("#submit").show();
+		    disabled = false;
+		});
+	})
+    }, 100);
+</script>
+
+{% endblock %}
+
+
 {% block content %}
 
-<div>
-  <p>Who's there?</p>
-  <form id="passphrase">
-    <input type="text"></input>
-    <button type="submit">Submit</button>
+<div id="knockknock">
+  <p>Stranger</p>
+  <form onsubmit="return false;">  
+    <input name="punchline" type="text" autofocus></input>
+    <button id="submit" type="submit">Submit</button>
   </form>
-
+  <div>
+    <span id="response"></span>
+    <span id="loading-text" class="p-green"</span>
+  </div>
 </div>
-
-
 
 {% endblock %}

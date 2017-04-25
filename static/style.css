@@ -4,7 +4,7 @@ body {
 }
 
 #content {
-    overflow: auto;
+    overflow: hidden;
     width: 640px;
     margin: 40px auto;
 }
@@ -12,27 +12,44 @@ body {
 
 @media (max-width: 600px) {
     #content {
-	width: 75%;
+        width: 75%;
     }
 }
 
-#banner {
+#index .banner {
     text-align: center;
 }
+
+#knockknock input[name="punchline"] {
+    border: 1px green solid;
+    height: 30px;
+    width: 35%;
+}
+
+@media (max-width: 600px) {
+    #knockknock input[name="punchline"] {
+	width: 50%;
+    }
+}
+
+#knockknock input[name="punchline"]:focus{
+    outline: none;
+}
+
+
 
 .p-italic {
     text-style: italic;
 }
 
 .p-red {
-    color: red;
+    color: red !important;
 }
 
 .p-blue {
-    color: blue;
+    color: blue !important;
 }
 
 .p-green {
-    color: green;
+    color: green !important;
 }
-
