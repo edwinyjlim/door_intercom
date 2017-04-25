@@ -1,2 +1,13 @@
-Flask>=0.8
-RPi.GPIO>=0.6
+blinker==1.4
+click==6.6
+Flask==0.11.1
+Flask-Mail==0.9.1
+httplib2==0.9.2
+itsdangerous==0.24
+Jinja2==2.8
+MarkupSafe==0.23
+pytz==2016.7
+RPi.GPIO==0.6.2
+six==1.10.0
+twilio==5.6.0
+Werkzeug==0.11.11

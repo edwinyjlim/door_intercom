@@ -71,12 +71,12 @@
 
 		    })
 			.fail(function(error) {
-			    $('#response').text(error.status + ' ' +error.statusText).addClass('p-red');
+			    $('#response').text(error.status + ' ' +error.statusText).addClass('p-red').removeClass('p-green');
 			    $('#loading-text').text('');
 			});
 		    
 		} else {
-		    $('#response').text(message).addClass('p-red');
+		    $('#response').text(message).addClass('p-red').removeClass('p-green');
 		    disabled = false;
 		}
 		

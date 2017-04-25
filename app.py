@@ -1,10 +1,33 @@
 from flask import Flask, request, render_template, jsonify
 import RPi.GPIO as GPIO
 import time
+from flask_mail import Mail, Message
+import ConfigParser
+import os
+
+
+
+
+parser = ConfigParser.ConfigParser()
+parser.read(os.path.expanduser('~/Desktop/.config.txt'))
+
 
 app = Flask(__name__)
+app.config.update(dict(
+    DEBUG = True,
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = 587,
+    MAIL_USE_TLS= True,
+    MAIL_USE_SSL = False,
+    MAIL_USERNAME = 'edwinyjlim@gmail.com',
+    MAIL_PASSWORD = parser.get('important', 'email_pw')
+))
 
-the_punchline = 'green'
+
+mail = Mail(app)
+the_punchline = parser.get('important', 'punchline')
+
+
 
 @app.context_processor
 def inject_template_globals():
@@ -68,9 +91,16 @@ def punchline():
 def buzzer():
     punchline = request.form.get('punchline')
     door_status = 'closed'
+    msg = Message("RPi buzzed open the door",
+                  sender="edwinyjlim@gmail.com",
+                  recipients=["edwinyjlim@gmail.com"])
+    msg.body = "delivered by Flask mail"
+                  
     if punchline == the_punchline:
         activate_GPIO(7,7)
         door_status = 'open'
+        mail.send(msg)
+                  
     return jsonify(door_status=door_status)
 
 
