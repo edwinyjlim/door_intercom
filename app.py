@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, jsonify
 import RPi.GPIO as GPIO
 import time
-from datetime import date
 
 app = Flask(__name__)
 
