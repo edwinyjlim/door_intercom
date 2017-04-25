@@ -4,7 +4,7 @@ import time
 
 app = Flask(__name__)
 
-the_punchline = 'danger'
+the_punchline = 'green'
 
 @app.context_processor
 def inject_template_globals():

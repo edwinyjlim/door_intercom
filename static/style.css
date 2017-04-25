@@ -6,18 +6,44 @@ body {
 #content {
     overflow: hidden;
     width: 640px;
-    margin: 40px auto;
-}
-
-
-@media (max-width: 600px) {
-    #content {
-        width: 75%;
-    }
+    margin: 45px auto;
 }
 
 #index .banner {
     text-align: center;
+}
+
+#poem {
+    line-height: 1.5em;
+}
+
+#poem .rhyme {
+    -webkit-transition: color 5s;
+    transition: color 5s;
+}
+
+#poem .rhyme.turn-green {
+    color: green;
+}
+
+#poem #author {
+    opacity: 0;
+    -webkit-transition: opacity 5s;
+    transition: opacity 5s;
+}
+
+#poem #author.show {
+    opacity: 1;
+}
+
+#knockknock {
+    -webkit-transition: margin-top 2s;
+    transition: margin-top 2s;
+    margin-top: -20px;
+}
+
+#knockknock.slidedown {
+    margin-top: 30px;
 }
 
 #knockknock input[name="punchline"] {
@@ -26,16 +52,28 @@ body {
     width: 35%;
 }
 
-@media (max-width: 600px) {
-    #knockknock input[name="punchline"] {
-	width: 50%;
-    }
-}
-
 #knockknock input[name="punchline"]:focus{
     outline: none;
 }
 
+
+@media (max-width: 600px) {
+    #content {
+        width: 80%;
+    }
+    #knockknock {
+	margin-top: -25px;
+    }
+    #knockknock.slidedown {
+	margin-top: 25px;
+    }
+    #knockknock input[name="punchline"] {
+	width: 50%;
+    }
+    #poem {
+	line-height: 1.2em;
+    }
+}
 
 
 .p-italic {
@@ -52,4 +90,8 @@ body {
 
 .p-green {
     color: green !important;
+}
+
+.p-underline {
+    text-decoration: underline;
 }

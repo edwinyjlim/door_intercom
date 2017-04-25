@@ -7,7 +7,18 @@
 
 <script>
     var disabled = false;
-    setTimeout(function() {     
+    setTimeout(function() {
+
+	$("input[name='punchline']").on("keyup keydown", function() {
+	    var text = $(this).val().trim();
+	    if (!text) {
+		$('.rhyme').text('_____').removeClass('p-underline');
+		$('#response').text('').removeClass('p-red p-green');
+	    } else {
+		$('.rhyme').text(text.toLowerCase()).addClass('p-underline');
+	    }
+	});
+    
 	$("form").on("submit", function() {
 
 	    if (disabled) {
@@ -33,7 +44,13 @@
 		var message = data.message;
 		
 		if (door_status === 'open') {
+		    $('#knockknock').addClass('slidedown');
 		    $('#response').text(message).addClass('p-green');
+		    $('.rhyme').addClass('turn-green');
+		    $('form').fadeOut(2000, function(){ $(this).remove();});
+		    $('#author').addClass('show');
+
+		    
 		    var dotCount = 0;
 		    var dots = '';
 		    var buzzing = setInterval(function() {
@@ -47,19 +64,17 @@
 			$('#loading-text').text('Buzzing'+dots);
 		    }, 500);
 
+
 		    $.post("/buzzer", {punchline: punchline}, function(data) {
-			$('#response').text('Door is closed.');
-			$('#loading-text').text('');
-			$("#submit").show();
+			//$('#response').text('Door is closed.');
+			$('#loading-text').fadeOut(2000);
+
 			clearInterval(buzzing);
-			disabled = false;
 
 		    })
 			.fail(function(error) {
 			    $('#response').text(error.status + ' ' +error.statusText).addClass('p-red');
 			    $('#loading-text').text('');
-			    $("#submit").show();
-			    disabled = false;
 			});
 		    
 		} else {
@@ -84,16 +99,31 @@
 
 {% block content %}
 
+<div id="poem">
+  The dawn was apple-<span class="rhyme">_____</span>.<br>
+  The sky was <span class="rhyme">_____</span> wine held up in the sun.<br>
+  The moon was a golden petal between.<br>
+  <br>
+  She opened her eyes, and <span class="rhyme">_____</span><br>
+  They shone, clear like flowers undone<br>
+  For the first time, now for the first time seen.<br>
+  <br>
+    <span id="author">- D. H. Lawrence</span>
+  <br>
+</div>
+
+
+
 <div id="knockknock">
-  <p>Stranger</p>
-  <form onsubmit="return false;">  
-    <input name="punchline" type="text" autocomplete="off" autofocus></input>
-    <button id="submit" type="submit">Submit</button>
-  </form>
+
   <div>
     <span id="response"></span>
     <span id="loading-text" class="p-green"</span>
   </div>
+  <form onsubmit="return false;">  
+    <input name="punchline" type="text" autocomplete="off" autofocus></input>
+    <button id="submit" type="submit">Submit</button>
+  </form>
 </div>
 
 {% endblock %}
