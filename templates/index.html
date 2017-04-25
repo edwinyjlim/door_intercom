@@ -2,7 +2,88 @@
 
 {% block content %}
 
-INTERCOM
+<div>
+  <a href="/knockknock">let me in.</a>
+</div>
+
+<div id="banner">
+  <h2>Door Intercom </h2>
+  <span>
+    96 Sterling Place Apt 5D <br>
+    Edwin Lim
+  </span>
+</div>
+
+
+<div>
+  <p>Welcome. This is the Flask application interface for Edwin's apartment door intercom. The system allows users to remotely open the apartment building door. It is comprised of three main pieces: the apartment Tektone Buzzer, an electrical breadboard, and a RaspberryPi computer.
+  </p>
+</div>
+
+<div>
+  <b>Tektone Buzzer</b>
+
+  <p>
+    The Tektone buzzer has a simple three button cover -- Door, Listen, Talk. Behind the cover is an electrical setup of wires running to four metal contact points labelled 1, 2, 3 and X. Contact points 2 and 3, when electrically connected, open the apartment building door. Simply pressing down the Door button creates the connection. Alternatively, for our system, two white wires run from contact points 2 and 3 to the breadboard.
+  </p>
+
+  <b>Breadboard</b>
+
+  <p>
+    The breadboard acts as the connector between the Tektone Buzzer contact points and the RaspberryPi GPIO pins. Corresponding colors signal which wire go to which GPIO pin: the <i class="p-blue">blue wire</i> goes to the 3.3V pin, the <i>black wire</i> goes to the ground pin, and the <i class="p-red">red wire</i> goes to the GPIO4 pin, a 3.3V pin that can be activated and deactivated programmatically.
+  </p>
+
+  <p>
+    On the breadboard, there are 3 main electrical circuits. Each circuit is also paired with a color LED light to signal if the circuit is either closed (electrically connected) or open (electrically disconnted). The <i class="p-blue">blue LED</i> runs from the 3.3V pin and is the simplest circuit. As long as the RaspberryPi is running, the <i class="p-blue">blue LED</i> circuit should be closed and the light turned on.
+  </p>
+
+  <p>
+    The <i>octocoupler</i> is the black rectangle lodged in between the <i class="p-green">green LED</i> and <i class="p-red">red LED</i> circuits. It acts as both an isolator and connector between two electrical circuits by emiting light from an LED to a phototransistor inside the black rectangular casing, effectively protecting two systems (like the apartment buzzer and my RaspberryPi) from frying each other in case of power spikes.
+  </p>
+
+  <p>
+    The <i class="p-red">red LED</i> circuit is on the LED side of the octocoupler. It's powered by two sources. The first source is the 3.3V pin, running from the <i class="p-blue">blue wire</i>, activated by pressing down the round button/switch that essentially acts as a doorbell. The second is the GPIO4 pin, <i class="p-red">red wire</i>, that is operated programmatically from the Flask web application -- this very fucking site.
+  </p>
+
+  <p>
+    With the <i class="p-red">red LED</i> turned on, through to the phototransitor side of the <i>octocoupler</i>, an electrical connection closes the <i class="p-green">green LED</i> circuit containing the two white wires running from the Tektone buzzer. Contact points 2 and 3 are thus connected and the apartment door opened.
+  </p>
+
+  <p>*The octocoupler has a forward voltage of 1.2V, the LED lights run around 20ma, and the resistors used are at 220 ohms. </p>
+
+  <b>RaspberryPi</b>
+
+  <p>
+    The RaspberryPi has the Flask app on a detatched screen session named "flaskapp" ($ screen -r flaskapp). The apartment router is running a dynamic DNS, fiveflightrock.mynetgear.com, and is portforwarding port 80 (web server requests) and port 22 (ssh requests) to the internal RaspberryPi IP address 192.168.1.4. Flask is running on port 5000.
+  </p>
+
+
+  <b>Endpoints</b>
+  <ul>
+    <li>/knockknock</li>
+    <li>/passphrase</li>
+  </ul>
+
+  <b>Helpful Reads</b>
+  <ul>
+    <li>
+      <a href="https://github.com/imightbeamy/buzzerbot9000/blob/master/how_to.md">https://github.com/imightbeamy/buzzerbot9000/blob/master/how_to.md</a>
+    </li>
+    <li>
+      <a href="https://www.youtube.com/watch?v=pYENAGK8qH4">https://www.youtube.com/watch?v=pYENAGK8qH4</a>
+    </li>
+    <li>
+      <a href="http://mkpochtoi.narod.ru/pc817_ds.pdf">http://mkpochtoi.narod.ru/pc817_ds.pdf</a>
+    </li>
+    <li>
+      <a href="http://www.ohmslawcalculator.com/ohms-law-calculator">http://www.ohmslawcalculator.com/ohms-law-calculator</a>
+    </li>
+  </ul>
+
+
+</div>
+
+
 
 
 {% endblock %}

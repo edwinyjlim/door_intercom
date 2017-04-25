@@ -7,17 +7,19 @@
     <meta charset="utf-8">
     <title ng-bind="title">Door Intercom</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/style.css?ts={{ts}}">
     <script src="scripts/jquery-3.2.1.min.js"></script>
     {% endblock %}
   </head>
 
   <body>
 
-    {% block content %}
-
-    {% endblock%}
-
+    <div id="content">
+      {% block content %}
+      
+      {% endblock%}
+    </div>
+      
   </body>
 
 

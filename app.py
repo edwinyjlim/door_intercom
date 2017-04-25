@@ -1,5 +1,4 @@
 from flask import Flask, request, render_template
-from twilio.rest import TwilioRestClient
 import RPi.GPIO as GPIO
 import time
 from datetime import date
@@ -7,18 +6,11 @@ from datetime import date
 app = Flask(__name__)
 
 
-# twilio account
-#tw_account_sid = "AC1d50cb742f20a3ba02d3469389b261d1"
-#tw_auth_token = "a4e877d10da778251189c9d07c250f34"
-#tw_phone_num = "+13108959170"
-#tw_client = TwilioRestClient(tw_account_sid, tw_auth_token)
-#my_phone_num = "+13108923481"
-
 
 @app.context_processor
 def inject_template_globals():
     return {
-        'nowts': time.clock(),
+        'ts': time.clock(),
     }
 
 

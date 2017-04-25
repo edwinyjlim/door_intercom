@@ -1,0 +1,38 @@
+body {
+    font-family: "Garamond", Serif;
+    font-size: 18px;
+}
+
+#content {
+    overflow: auto;
+    width: 640px;
+    margin: 40px auto;
+}
+
+
+@media (max-width: 600px) {
+    #content {
+	width: 75%;
+    }
+}
+
+#banner {
+    text-align: center;
+}
+
+.p-italic {
+    text-style: italic;
+}
+
+.p-red {
+    color: red;
+}
+
+.p-blue {
+    color: blue;
+}
+
+.p-green {
+    color: green;
+}
+
