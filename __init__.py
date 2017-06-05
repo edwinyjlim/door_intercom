@@ -6,10 +6,10 @@ import ConfigParser
 import os
 
 
-
+shutdown = False
 
 parser = ConfigParser.ConfigParser()
-parser.read(os.path.expanduser('~/Desktop/.config.txt'))
+parser.read(os.path.expanduser('/home/pi/Desktop/.config.txt'))
 
 
 app = Flask(__name__)
@@ -64,15 +64,20 @@ def activate_GPIO (pin, duration):
 
 @app.route('/')
 def hello_world():
+    if shutdown:
+        return "shutdown variable enabled"
     return render_template('index.html')
 
 @app.route('/knockknock')
 def knockknock():
+    if shutdown:
+        return "shutdown variable enabled"
     return render_template('knockknock.html')
 
 @app.route('/punchline', methods=['POST'])
 def punchline():
-    
+    if shutdown:
+        return "shutdown variable enabled"
     punchline = request.form.get('punchline')
     print 'user submitted passphrase: '+punchline
     
@@ -89,6 +94,8 @@ def punchline():
 
 @app.route('/buzzer', methods=['POST'])
 def buzzer():
+    if shutdown:
+        return "shutdown variable enabled"
     punchline = request.form.get('punchline')
     door_status = 'closed'
     msg = Message("RPi buzzed open the door",
@@ -106,12 +113,10 @@ def buzzer():
 
 @app.route('/shutdown', methods=['POST', 'GET'])
 def shutdown_server():
-    func = request.environ.get('werkzeug.server.shutdown')
-    if func is None:
-        raise RuntimeError('Not running with the Werkzeug Server')
-    func()
-    return 'Server is shutting down.'
+    global shutdown
+    shutdown = True
+    return 'Server shutdown variable set to True.'
 
 if __name__ == "__main__":
-    app.run(debug=True,host='0.0.0.0')
+    app.run()
         
