@@ -56,11 +56,18 @@
     <b>RaspberryPi</b>
 
     <p>
-      The RaspberryPi is running an apache2 server through modwsgi to serve the Flask app at /var/www/flaskapps/door_intercom/. The apache config file lives in /etc/apache2/sites-available/door_intercom.conf and is excecuted by the user "pi". To restart the server: $ sudo service apache2 reload.  
+      The RaspberryPi is running an apache2 server through modwsgi to serve the Flask app at /var/www/flaskapps/door_intercom/. The apache config file lives in /etc/apache2/sites-available/door_intercom.conf and is excecuted by the user "pi".
+    </p>
+
+    <p>
+      restart the server: $ sudo service apache2 reload.<br>
+      enable the site: $ sudo a2ensite door_intercom.conf<br>
+      disable the site: $ sudo a2dissite door_intercom.conf
     </p>
     
+    
     <p>
-      The apartment wifi router is running a dynamic DNS, fiveflightrock.mynetgear.com, and is portforwarding port 80 (web server requests) and port 22 (ssh requests) to their twin ports on the RaspberryPi at the IP address 192.168.1.4. Flask is running on port 5000.
+      The apartment wifi router is running a dynamic DNS, fiveflightrock.mynetgear.com through a www.noip.com account, to my public ip address 24.90.72.74 and is portforwarding port 80 (web server requests) and port 22 (ssh requests) to their twin ports on the RaspberryPi at the ip address 192.168.1.4. Flask is running on port 5000.
     </p>
 
     <p>
